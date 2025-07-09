@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromptCore - AI 기반 콘텐츠 전략 파트너</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #FFD700;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 0 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #333;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+        }
+
+        /* Services Section */
+        .services {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .service-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .service-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .service-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+            color: #666;
+        }
+
+        .service-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* Target Customers */
+        .targets {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .targets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .target-card {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .target-card:hover {
+            transform: scale(1.05);
+        }
+
+        .target-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #667eea;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.9);
+            color: #333;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">PromptCore</div>
+            <ul class="nav-links">
+                <li><a href="#services">서비스</a></li>
+                <li><a href="#targets">고객</a></li>
+                <li><a href="#features">특징</a></li>
+                <li><a href="#contact">문의</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>AI 기반 콘텐츠 전략 파트너</h1>
+                <p class="subtitle">블로그, SNS, 브랜드 콘텐츠를 기획부터 실행까지<br>자동화 시스템으로 완벽하게 관리합니다</p>
+                <button class="cta-button" onclick="scrollToContact()">무료 상담 신청</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title">핵심 서비스</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">🤖</div>
+                    <h3>콘텐츠 자동화</h3>
+                    <p>AI 기반 블로그 자동 생성 및 SNS 쓰레드 자동화로 효율적인 콘텐츠 운영</p>
+                    <ul class="service-list">
+                        <li>블로그 자동 생성봇 운영</li>
+                        <li>SNS 쓰레드 자동 생성기</li>
+                        <li>블로그봇 고도화 커스터마이징</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">📝</div>
+                    <h3>블로그·SNS 운영대행</h3>
+                    <p>기획부터 등록까지 원스톱 콘텐츠 운영 서비스</p>
+                    <ul class="service-list">
+                        <li>기업 블로그 정기 운영 대행</li>
+                        <li>민감 업종 대응 콘텐츠 제작</li>
+                        <li>구글 애드센스 승인용 블로그</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">🎨</div>
+                    <h3>브랜드 전략 & 디자인</h3>
+                    <p>브랜드 아이덴티티 설계부터 시각적 구현까지</p>
+                    <ul class="service-list">
+                        <li>브랜드 콘텐츠 기획 & 자동배포</li>
+                        <li>기업 제안서 / 마케팅 자료 작성</li>
+                        <li>로고 & 브랜딩 디자인</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">🎓</div>
+                    <h3>교육 & 시스템 구축</h3>
+                    <p>자동화 시스템 구축 및 운영 교육 제공</p>
+                    <ul class="service-list">
+                        <li>블로그봇 구축 컨설팅</li>
+                        <li>워드프레스 콘텐츠 시스템 구축</li>
+                        <li>고객용 자동 견적 시스템</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">📍</div>
+                    <h3>지역기반 마케팅</h3>
+                    <p>로컬 비즈니스 특화 마케팅 전략 및 수익화</p>
+                    <ul class="service-list">
+                        <li>로컬 중소상공인 홍보 지원</li>
+                        <li>공공기관 / 병원 전용 콘텐츠</li>
+                        <li>지역 특화 SEO 전략</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Target Customers -->
+    <section id="targets" class="targets">
+        <div class="container">
+            <h2 class="section-title">맞춤형 솔루션</h2>
+            <div class="targets-grid">
+                <div class="target-card">
+                    <div class="target-icon">👤</div>
+                    <h3>개인 브랜드</h3>
+                    <p>전문성을 드러내는 콘텐츠로 개인 브랜딩 강화</p>
+                </div>
+                <div class="target-card">
+                    <div class="target-icon">🏥</div>
+                    <h3>병원 · 의료진</h3>
+                    <p>신뢰도 높은 의료 콘텐츠와 환자 소통 전략</p>
+                </div>
+                <div class="target-card">
+                    <div class="target-icon">🎓</div>
+                    <h3>학원 · 교육</h3>
+                    <p>학부모 신뢰 구축과 교육 전문성 어필</p>
+                </div>
+                <div class="target-card">
+                    <div class="target-icon">🏪</div>
+                    <h3>소상공인</h3>
+                    <p>지역 기반 고객 유치와 매출 증대</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">PromptCore의 차별점</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <div>
+                        <h3>AI 자동화 기술</h3>
+                        <p>고품질 콘텐츠를 자동으로 생성하는 혁신적인 AI 시스템</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎯</div>
+                    <div>
+                        <h3>맞춤형 전략</h3>
+                        <p>업종별, 고객별 특화된 콘텐츠 전략 설계</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <div>
+                        <h3>성과 중심 운영</h3>
+                        <p>데이터 기반 성과 분석과 지속적인 최적화</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🤝</div>
+                    <div>
+                        <h3>소통 중심 파트너십</h3>
+                        <p>고객과의 긴밀한 소통을 통한 맞춤형 서비스</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔄</div>
+                    <div>
+                        <h3>원스톱 서비스</h3>
+                        <p>기획부터 실행, 관리까지 모든 과정을 한 번에</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🚀</div>
+                    <div>
+                        <h3>지속적인 혁신</h3>
+                        <p>최신 AI 기술을 활용한 서비스 업그레이드</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">상담 신청</h2>
+            <p style="margin-bottom: 2rem; font-size: 1.1rem;">AI 기반 콘텐츠 전략으로 비즈니스를 성장시켜보세요</p>
+            <div class="contact-form">
+                <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+                    <!-- Web3Forms Access Key -->
+                    <input type="hidden" name="access_key" value="8b8bbb2a-87ee-46b4-809c-37de2f89e92e">
+                    <input type="hidden" name="subject" value="[PromptCore] 상담신청">
+                    <input type="hidden" name="from_name" value="PromptCore 홈페이지">
+                    
+                    <div class="form-group">
+                        <label>이름</label>
+                        <input type="text" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>연락처</label>
+                        <input type="tel" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>이메일</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>업종/분야</label>
+                        <input type="text" name="business" placeholder="예: 치과, 학원, 개인브랜드 등">
+                    </div>
+                    <div class="form-group">
+                        <label>문의 내용</label>
+                        <textarea name="message" placeholder="관심있는 서비스나 문의사항을 자유롭게 작성해주세요"></textarea>
+                    </div>
+                    <button type="submit" class="cta-button" id="submitBtn">상담 신청하기</button>
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <small style="opacity: 0.8;">또는</small><br>
+                        <button type="button" class="cta-button" onclick="openKakaoChat()" style="background: #FEE500; color: #000; margin-top: 0.5rem;">💬 카톡 상담</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 PromptCore. AI 기반 콘텐츠 전략 파트너</p>
+            <p>문의: contact@promptcore.co.kr | 전화: 1588-0000</p>
+        </div>
+    </footer>
+
+    <script>
+        // 페이지 로드 완료 후 실행
+        window.addEventListener('load', function() {
+            console.log('페이지 로드 완료 - Web3Forms 준비됨');
+        });
+
+        // Smooth scrolling
+        function scrollToContact() {
+            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 카카오톡 상담 (임시 - 카카오톡 채널 URL로 교체 예정)
+        function openKakaoChat() {
+            // 임시: 카카오톡 설치 확인 후 실행
+            if (confirm('카카오톡으로 상담을 시작하시겠습니까?\n(카카오톡 채널 설정 후 실제 연결됩니다)')) {
+                // 여기에 실제 카카오톡 채널 URL을 넣으세요
+                // window.open('http://pf.kakao.com/_PromptCore', '_blank');
+                alert('카카오톡 채널 설정이 완료되면 바로 연결됩니다!\n지금은 폼으로 문의해주세요 😊');
+            }
+        }
+
+        // Web3Forms 제출 처리
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('contactForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const submitBtn = document.getElementById('submitBtn');
+                const originalText = submitBtn.textContent;
+                
+                // 버튼 상태 변경
+                submitBtn.textContent = '전송 중...';
+                submitBtn.disabled = true;
+                
+                try {
+                    // Web3Forms로 전송
+                    const response = await fetch(this.action, {
+                        method: 'POST',
+                        body: new FormData(this)
+                    });
+                    
+                    if (response.ok) {
+                        // 성공
+                        alert('✅ 상담신청이 완료되었습니다!\n빠른 시일 내에 연락드리겠습니다.');
+                        this.reset();
+                    } else {
+                        throw new Error('전송 실패');
+                    }
+                    
+                } catch (error) {
+                    console.log('Web3Forms 실패:', error);
+                    alert('❌ 전송에 실패했습니다.\n잠시 후 다시 시도해주세요.');
+                }
+                
+                // 버튼 원상복구
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            });
+        });
+
+        // Scroll animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.6s ease-out forwards';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all service cards and feature items
+        document.querySelectorAll('.service-card, .target-card, .feature-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(102, 126, 234, 0.95)';
+            } else {
+                header.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            }
+        });
+    </script>
+</body>
+</html>
